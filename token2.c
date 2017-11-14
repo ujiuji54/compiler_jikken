@@ -114,28 +114,29 @@ void statement()
 	nexttoken(4);
 	if(ttype()==3){
 		nexttoken(4);
-		if(ch(":=")!=1) exit_func("Syntax Error");
+		if(ch(":=")!=1) exit_func("statement");
 		expression();
 	}
 	else if(ch("begin")){
 		statement();
 		nexttoken(4);
-		while(ch(";")==1){
+		while(ch(";")){
 			statement();
 			nexttoken(4);
 		}
-		if(ch("end")!=1) exit_func("Syntax Error");
+		if(ch("end")!=1) exit_func("statement");
 	}
 	else if(ch("if")){
 		condition();
 		nexttoken(4);
-		if(ch("then")!=1) exit_func("Syntax Error");
+		if(ch("then")!=1) exit_func("statement");
 		statement();
 	}
 	else if(ch("while")){
 		condition();
 		nexttoken(4);
-		if(ch("do")!=1) exit_func("Syntax Error");
+		if(ch("do")!=1) exit_func("statement");
+		statement();
 	}
 	else if(ch("return")){
 		expression();
@@ -149,52 +150,72 @@ void statement()
 
 void condition(){
 	nexttoken(5);
-	if(ch("odd")==1)expression();
+	if(ch("odd"))expression();
 	else{
+		backtoken();
 		expression();
 		nexttoken(5);
-		if(ch("=")==1)expression();
-		else if(ch("<>")==1)expression();
-		else if(ch("<")==1)expression();
-		else if(ch(">")==1)expression();
-		else if(ch("<=")==1)expression();
-		else if(ch(">=")==1)expression();
-		else exit_func("Syntax Error");
+		if(ch("="))expression();
+		else if(ch("<>"))expression();
+		else if(ch("<"))expression();
+		else if(ch(">"))expression();
+		else if(ch("<="))expression();
+		else if(ch(">="))expression();
+		else exit_func("condition");
 	}
 }
 
 void expression(){
 	nexttoken(6);
-	if(ch("+")!=1 || ch("-")!=1)backtoken();
+	if(ch("+")!=1 && ch("-")!=1)backtoken();
 	term();
 	nexttoken(6);
-	if(ch("+")==1 || ch("-")==1)term();
-	else backtoken();
+	while(ch("+") || ch("-")){
+		term();
+		nexttoken(6);
+	}
+	backtoken();
 }
 
 void term(){
 	factor();
 	nexttoken(7);
-	if(ch("*")==1 || ch("/")==1)factor();
-	else backtoken();
+	while(ch("*") || ch("/")){
+		factor();
+		nexttoken(7);
+	}
+	backtoken();
 }
 
 void factor(){
 	nexttoken(8);
-	if(ttype()==3||ttype()==4)backtoken();
-	else if(ttype()==1){
+	if(ttype()==4);
+	else if(ttype()==3){
 		nexttoken(8);
-		if(ch("(")==1){
-			
+		if(!ch("(")){
+			backtoken();
 		}
-		else exit_func("Syntax Error");
+		else{
+			nexttoken(8);
+			if(ch(")")!=1){
+				backtoken();
+				expression();
+				nexttoken(8);
+				while(ch(",")){
+					expression();
+					nexttoken(8);
+				}
+				if(ch(")")!=1) exit_func("factor"); 
+			}
+		}
 	}
-	else if(ch("(")==1){
+	else if(ch("(")){
 		expression();
 		nexttoken(8);
-		if(ch(")")==1)backtoken();
+		if(ch(")")!=1) exit_func("factor");
+		backtoken();
 	}
-	else exit_func("Syntax Error");
+	else exit_func("factor");
 }
 
 void nexttoken(int s){
@@ -241,13 +262,16 @@ int ttype()  //トークンのタイプを返す
 		}
 	}
 
-	for(i=0;i<16;i++){
+	for(i=0;i<10;i++){
+		if(token[0]==sign[i])return 2;
+	}
+	/*:for(i=0;i<16;i++){
 		c=strcmp(token,sign);
 		if(c==0){
 			return 2;
 			break;
 		}
-	}
+	}*/
 
 	if(token[0] >='0' && token[0]<='9')
 		return 4;

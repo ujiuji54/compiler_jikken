@@ -190,21 +190,10 @@ void three_num_code(){
 }
 
 void kikaigo(char str1[5],char str2[5],char str3[5],char str4[5]){
-	if(strcmp(str1,"+")==0){
-		printf("LD %s \n",str2);
-		printf("AD %s \n",str3);
-		printf("ST %s \n",str4);
-	}else if(strcmp(str1,"-")==0){
-		printf("LD %s \n",str2);
-		printf("SB %s \n",str3);
-		printf("ST %s \n",str4);
-	}else if(strcmp(str1,"*")==0){
-		printf("LD %s \n",str2);
-		printf("ML %s \n",str3);
-		printf("ST %s \n",str4);
-	}else if(strcmp(str1,"/")==0){
-		printf("LD %s \n",str2);
-		printf("DV %s \n",str3);
-		printf("ST %s \n",str4);
-	}
+	printf("LD %s \n",str2);
+	if(strcmp(str1,"+")==0)printf("AD %s \n",str3);
+	else if(strcmp(str1,"-")==0)printf("SB %s \n",str3);
+	else if(strcmp(str1,"*")==0)printf("ML %s \n",str3);
+	else if(strcmp(str1,"/")==0)printf("DV %s \n",str3);
+	printf("ST %s \n",str4);
 }

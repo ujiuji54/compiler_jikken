@@ -166,13 +166,18 @@ void three_num_code(){
 			strcpy(threecode[2],stack[stptr-1]);
 			pop_stack();
 			pop_stack();
-			ss[0]=c; ss[1]='\0';  //新しい変数を作る
-			push_stack(ss);
-			strcpy(threecode[3],ss);
-			c++;
+			if(strcmp(outstring[i+1],"=")==0){
+				strcpy(threecode[3],stack[stptr-1]);
+			}else{
+				ss[0]=c; ss[1]='\0';  //新しい変数を作る
+				push_stack(ss);
+				strcpy(threecode[3],ss);
+				c++;
+			}
 			printf("%s (%s %s %s)\n",
 				threecode[0],threecode[1],threecode[2],threecode[3]);
-		}else if(strcmp(outstring[i],"=")==0){  //＝なら２番地コード
+		}
+/*		else if(strcmp(outstring[i],"=")==0){  //＝なら２番地コード
 			strcpy(twocode[0],outstring[i]);
 			strcpy(twocode[1],stack[stptr-2]);
 			strcpy(twocode[2],stack[stptr-1]);
@@ -180,5 +185,6 @@ void three_num_code(){
 			pop_stack();
 			printf("%s (%s %s)\n",twocode[0],twocode[1],twocode[2]);
 		}
+*/
 	}
 }

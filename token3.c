@@ -57,13 +57,11 @@ int main()
 				push_stack(token[i]);
 			}else if(comp_token(i)==1){   //tokenの優先>topの優先
 				push_stack(token[i]);
-
 			}else{                       //tokenの優先<=topの優先
 				while(comp_token(i)!=1){
 					strcpy(outstring[onum],stack[stptr-1]);
 					pop_stack();
 					onum++;
-					i++;
 				}
 				push_stack(token[i]);
 			}
